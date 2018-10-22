@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,6 +14,21 @@ public class FileController {
 
     @RequestMapping(value = "/files", method= RequestMethod.GET)
     public List<File> getFiles(){
-        return Collections.singletonList(new File("15", "20"));
+        return getFileList();
+    }
+
+    public List<File> getFileList(){
+        List<File> files = new ArrayList<>();
+        File file = new File("15", "12 grudnia 2015","Bezpieczeństwo Usług w Sieci", "Przykładowy opis dokumentu znajdującego się w google documents", "https://docs.google.com/document/d/1vlN3jeECgTVRO0h5l9ZRl1k1hFDtEKypoYUKzo5FFeM/edit?usp=sharing");
+        File file1 = new File("16", "12 grudnia 2015","Bezpieczeństwo Usług w Sieci", "Przykładowy opis dokumentu znajdującego się w google documents", "https://docs.google.com/document/d/1vlN3jeECgTVRO0h5l9ZRl1k1hFDtEKypoYUKzo5FFeM/edit?usp=sharing");
+        File file2 = new File("17", "12 grudnia 2015","Bezpieczeństwo Usług w Sieci", "Przykładowy opis dokumentu znajdującego się w google documents", "https://docs.google.com/document/d/1vlN3jeECgTVRO0h5l9ZRl1k1hFDtEKypoYUKzo5FFeM/edit?usp=sharing");
+        File file3 = new File("18", "12 grudnia 2015","Bezpieczeństwo Usług w Sieci", "Przykładowy opis dokumentu znajdującego się w google documents", "https://docs.google.com/document/d/1vlN3jeECgTVRO0h5l9ZRl1k1hFDtEKypoYUKzo5FFeM/edit?usp=sharing");
+        File file4 = new File("19", "12 grudnia 2015","Bezpieczeństwo Usług w Sieci", "Przykładowy opis dokumentu znajdującego się w google documents", "https://docs.google.com/document/d/1vlN3jeECgTVRO0h5l9ZRl1k1hFDtEKypoYUKzo5FFeM/edit?usp=sharing");
+        files.add(file);
+        files.add(file1);
+        files.add(file2);
+        files.add(file3);
+        files.add(file4);
+        return files;
     }
 }
