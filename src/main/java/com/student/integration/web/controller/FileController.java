@@ -1,6 +1,11 @@
 package com.student.integration.web.controller;
 
+import com.google.api.services.drive.model.FileList;
+import com.student.integration.service.GoogleDriveService;
 import com.student.integration.web.response.File;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +15,9 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class FileController {
+    private final GoogleDriveService googleDriveService;
 
     @RequestMapping(value = "/files", method= RequestMethod.GET)
     public List<File> getFiles(){
@@ -30,5 +37,14 @@ public class FileController {
         files.add(file3);
         files.add(file4);
         return files;
+    }
+
+    @GetMapping(value = "/drive")
+    public FileList goToDrive(){
+        try {
+            return googleDriveService.getFiles();
+        }catch(Exception e){
+            return null;
+        }
     }
 }
