@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -52,18 +50,23 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
     @Autowired
     public GoogleDriveServiceImpl(
-            @Value("${tokensDirectoryPath}") String tokensDirectoryPath,
-            @Value("${applicationName") String applicationName,
-            @Value("${credentialsFilePath}") String credentialsFilePath) throws GeneralSecurityException, IOException {
+            @Value("${applicationName}") String applicationName,
+            @Value("${drive.tokensDirectoryPath}") String tokensDirectoryPath,
+            @Value("${drive.credentialsFilePath}") String credentialsFilePath,
+            @Value("${drive.enabled}")Boolean driveEnabled) throws GeneralSecurityException, IOException {
         this.applicationName = applicationName;
         this.tokensDirectoryPath = tokensDirectoryPath;
         this.credentialsFilePath = credentialsFilePath;
 
         // Build a new authorized API client service.
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                .setApplicationName(applicationName)
-                .build();
+        if(driveEnabled) {
+            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(applicationName)
+                    .build();
+        }else{
+            service = null;
+        }
     }
 
     /**
@@ -97,6 +100,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     public String uploadFile(java.io.File file) throws IOException{
         File fileMetadata = new File();
         fileMetadata.setName(file.getName());
+        //TODO: google returns bad mime type exception
         FileContent mediaContent = new FileContent(FileType.GOOGLE_DOCS.toString(), file);
         fileMetadata = service.files().create(fileMetadata, mediaContent)
                 .setFields("id")
@@ -107,5 +111,10 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     @Override
     public File getFileMetadata(String fileId) throws IOException {
         return service.files().get(fileId).execute();
+    }
+
+    @Override
+    public void deleteFile(String fileId) throws IOException {
+        service.files().delete(fileId).execute();
     }
 }

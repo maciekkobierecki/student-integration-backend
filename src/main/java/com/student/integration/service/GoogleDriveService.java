@@ -8,7 +8,10 @@ import java.security.GeneralSecurityException;
 
 
 public interface GoogleDriveService {
-    public FileList getFiles() throws IOException, GeneralSecurityException;
-    public File getFileMetadata(String fileId) throws IOException;
-    public String uploadFile(java.io.File file) throws IOException;
+    FileList getFiles() throws IOException, GeneralSecurityException;
+    File getFileMetadata(String fileId) throws IOException;
+    String uploadFile(java.io.File file) throws IOException;
+    void deleteFile(String fileId) throws IOException;
+
+
 }

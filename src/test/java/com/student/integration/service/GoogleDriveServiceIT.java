@@ -1,12 +1,12 @@
 package com.student.integration.service;
 
+import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.student.integration.ApplicationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -37,11 +37,25 @@ public class GoogleDriveServiceIT extends ApplicationTests {
     public void shouldUploadFileToDrive() throws IOException{
         //given
         String fileName = "testFile.txt";
-        File file = new ClassPathResource(fileName).getFile();
+        java.io.File file = new ClassPathResource(fileName).getFile();
         //when
         String id = googleDriveService.uploadFile(file);
         //then
         String resultName = googleDriveService.getFileMetadata(id).getName();
         assertEquals(fileName, resultName);
+    }
+
+    @Test
+    public void shouldDeleteSpecifiedFile() throws IOException{
+        //given
+        String fileName = "testFile.txt";
+        java.io.File file = new ClassPathResource(fileName).getFile();
+        String id = googleDriveService.uploadFile(file);
+
+        //when
+        googleDriveService.deleteFile(id);
+        //then
+        File result = googleDriveService.getFileMetadata(id);
+        String name = result.getName();
     }
 }
