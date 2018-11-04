@@ -1,7 +1,7 @@
 package com.student.integration.google.drive;
 
 public enum FileType {
-    GOOGLE_DOCS("application/vnd.google-apps.document");
+    GOOGLE_DOCS("text/plain");
 
     private final String type;
     private FileType(String type){

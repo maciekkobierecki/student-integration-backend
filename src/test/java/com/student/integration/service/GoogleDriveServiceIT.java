@@ -1,5 +1,6 @@
 package com.student.integration.service;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.student.integration.ApplicationTests;
@@ -17,23 +18,6 @@ public class GoogleDriveServiceIT extends ApplicationTests {
     private GoogleDriveService googleDriveService;
 
     @Test
-    public void testDriveServiceFetchFiles(){
-        //given
-
-        //when
-        FileList result = null;
-        try {
-            result = googleDriveService.getFiles();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-        //then
-        assertEquals(result.getFiles().get(0).getName(), "test");
-    }
-
-    @Test
     public void shouldUploadFileToDrive() throws IOException{
         //given
         String fileName = "testFile.txt";
@@ -43,6 +27,7 @@ public class GoogleDriveServiceIT extends ApplicationTests {
         //then
         String resultName = googleDriveService.getFileMetadata(id).getName();
         assertEquals(fileName, resultName);
+        googleDriveService.deleteFile(id);
     }
 
     @Test
@@ -51,11 +36,15 @@ public class GoogleDriveServiceIT extends ApplicationTests {
         String fileName = "testFile.txt";
         java.io.File file = new ClassPathResource(fileName).getFile();
         String id = googleDriveService.uploadFile(file);
-
+        int errorCode = 0;
         //when
-        googleDriveService.deleteFile(id);
+        try {
+            googleDriveService.deleteFile(id);
+            googleDriveService.getFileMetadata(id);
+        }catch(GoogleJsonResponseException e){
+            errorCode = e.getStatusCode();
+        }
         //then
-        File result = googleDriveService.getFileMetadata(id);
-        String name = result.getName();
+        assertEquals(404, errorCode);
     }
 }
