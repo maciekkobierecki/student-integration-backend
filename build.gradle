@@ -28,7 +28,12 @@ dependencies {
 	compile(
 			'org.springframework.boot:spring-boot-starter',
 			'org.springframework.boot:spring-boot-starter-web',
-			'org.projectlombok:lombok:1.18.2')
+			'org.projectlombok:lombok:1.18.2',
+			'com.google.api-client:google-api-client:1.23.0',
+			'com.google.oauth-client:google-oauth-client-jetty:1.23.0',
+			'com.google.apis:google-api-services-drive:v3-rev110-1.23.0',
+			'org.springframework.security.oauth:spring-security-oauth2:2.3.3.RELEASE',
+			'org.mybatis:mybatis-migrations:3.3.5')
 	testCompile(
 			'org.springframework.boot:spring-boot-starter-test',
 			'junit:junit:4.12',
