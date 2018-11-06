@@ -1,9 +1,8 @@
-package com.student.integration.model;
+package com.student.integration.model.entity;
 
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @Entity

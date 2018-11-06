@@ -1,22 +1,18 @@
-package com.student.integration.service;
+package com.student.integration.service.drive;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.FileList;
 import com.student.integration.ApplicationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 import static org.junit.Assert.assertEquals;
 
 public class GoogleDriveServiceIT extends ApplicationTests {
     @Autowired
     private GoogleDriveService googleDriveService;
-
     @Test
     public void shouldUploadFileToDrive() throws IOException{
         //given

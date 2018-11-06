@@ -1,4 +1,4 @@
-package com.student.integration.model;
+package com.student.integration.model.entity;
 
 import lombok.Data;
 
@@ -22,6 +22,6 @@ public class Subject {
     @Column(name="display_name_short")
     private String displayNameShort;
 
-    @Column(name="id")
+    @Column(name="academy_id")
     private Long academyId;
 }

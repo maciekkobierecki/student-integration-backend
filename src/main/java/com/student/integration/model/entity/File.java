@@ -1,4 +1,4 @@
-package com.student.integration.model;
+package com.student.integration.model.entity;
 
 import lombok.Data;
 
