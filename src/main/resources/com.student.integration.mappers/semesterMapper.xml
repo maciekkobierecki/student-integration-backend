@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.student.integration.mappers.SemesterMapper">
+    <select id="getSemesters" resultMap="semesterResultMap">
+        select * from UNIVERSITY_SEMESTERS
+    </select>
+
+    <select id="getSemester" resultMap="semesterResultMap">
+        select * from UNIVERSITY_SEMESTERS where ID = #{id}
+    </select>
+
+    <insert id="insertSemester" useGeneratedKeys="true" keyColumn="id" keyProperty="semester.id">
+		insert into UNIVERSITY_SEMESTERS(SEMESTER_NAME)
+		values (#{semester.semesterName})
+	</insert>
+
+    <update id="updateSemester">
+      update UNIVERSITY_SEMESTERS set
+        semester_name = #{semester.semesterName}
+        where ID = #{semester.id}
+    </update>
+
+    <delete id="deleteSemester">
+        delete from UNIVERSITY_SEMESTERS where ID = #{id}
+    </delete>
+
+    <resultMap id="semesterResultMap" type="com.student.integration.model.Semester" autoMapping="true">
+        <result property="semesterName" column="semester_name"/>
+    </resultMap>
+</mapper>

@@ -1,9 +1,8 @@
 package com.student.integration.web.controller;
 
 import com.google.api.services.drive.model.FileList;
-import com.student.integration.service.GoogleDriveService;
+import com.student.integration.service.drive.GoogleDriveService;
 import com.student.integration.web.response.File;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController

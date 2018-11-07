@@ -1,4 +1,4 @@
-package com.student.integration.service.impl;
+package com.student.integration.service.drive.impl;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -16,7 +16,7 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.student.integration.google.drive.FileType;
-import com.student.integration.service.GoogleDriveService;
+import com.student.integration.service.drive.GoogleDriveService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
