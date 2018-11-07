@@ -1,12 +1,12 @@
-package com.student.integration.model.DTO;
+package com.student.integration.model;
 
 import lombok.Data;
 
 @Data
-public class SubjectDTO {
+public class Subject {
     private Long id;
     private String subjectName;
     private String displayName;
-    private String displayNameShort;
+    private String subjectNameShort;
     private Long academyId;
 }

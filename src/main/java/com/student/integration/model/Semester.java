@@ -1,9 +1,9 @@
-package com.student.integration.model.DTO;
+package com.student.integration.model;
 
 import lombok.Data;
 
 @Data
-public class SemesterDTO {
+public class Semester {
     private Long id;
     private String semesterName;
 }

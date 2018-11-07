@@ -1,6 +1,6 @@
 package com.student.integration.web.controller;
 
-import com.student.integration.model.entity.Academy;
+import com.student.integration.model.Academy;
 import com.student.integration.service.academy.AcademyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
