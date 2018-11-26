@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 public class File {
     private final String id;
     private final String createDate;
-    private final String subject;
+    private final String name;
     private final String content;
     private final String url;
 }
