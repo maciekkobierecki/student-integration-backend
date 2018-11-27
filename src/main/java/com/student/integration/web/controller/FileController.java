@@ -2,6 +2,7 @@ package com.student.integration.web.controller;
 
 import com.google.api.services.drive.model.FileList;
 import com.student.integration.service.drive.GoogleDriveService;
+import com.student.integration.web.request.EditFileRequest;
 import com.student.integration.web.request.FileListRequest;
 import com.student.integration.web.response.File;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,13 @@ public class FileController {
         return getFileList(1L);
     }
 
-    @PostMapping(value = "/files/{subjectId}")
+    @PostMapping(value = "/file/{subjectId}/new")
     public void createDocument(@PathVariable Long subjectId)throws Exception{
+        Thread.sleep(2000L);
+    }
+
+    @PostMapping(value = "file/edit")
+    public void editFile(@RequestBody EditFileRequest request) throws Exception{
         Thread.sleep(2000L);
     }
 
