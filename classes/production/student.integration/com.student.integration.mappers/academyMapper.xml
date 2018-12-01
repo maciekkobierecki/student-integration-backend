@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.student.integration.mappers.AcademyMapper">
+
+    <select id="getAcademies" resultMap="academyResultMap">
+        select * from ACADEMIES
+    </select>
+
+    <select id="getAcademy" resultMap="academyResultMap">
+        select * from ACADEMIES where ID = #{id}
+    </select>
+
+    <insert id="insertAcademy" useGeneratedKeys="true" keyColumn="id" keyProperty="academy.id">
+		insert into ACADEMIES (ACADEMY_NAME, ACADEMY_NAME_SHORT)
+		values (#{academy.academyName},#{academy.academyNameShort})
+	</insert>
+
+    <update id="updateAcademy">
+      update ACADEMIES set
+        ACADEMY_NAME = #{academy.academyName},
+        ACADEMY_NAME_SHORT = #{academy.academyNameShort}
+        where ID = #{academy.id}
+    </update>
+
+    <delete id="deleteAcademy">
+        delete from ACADEMIES where ID = #{id}
+    </delete>
+
+    <resultMap id="academyResultMap" type="com.student.integration.model.Academy" autoMapping="true">
+        <result property="academyName" column="academy_name"/>
+        <result property="academyNameShort" column="academy_name_short"/>
+    </resultMap>
+</mapper>

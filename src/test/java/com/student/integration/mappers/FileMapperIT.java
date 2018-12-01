@@ -17,7 +17,7 @@ public class FileMapperIT extends ApplicationTests {
         file.setRatingCount(1222L);
         fileMapper.insertFile(file);
         File result = fileMapper.getFile(file.getId());
-        fileMapper.updateFile(file);
+        fileMapper.updateFile(file.getId(), file.getName(), file.getContent());
         fileMapper.deleteFile(file.getId());
     }
 }
