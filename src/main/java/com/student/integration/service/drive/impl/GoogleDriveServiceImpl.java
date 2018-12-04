@@ -91,6 +91,17 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     }
 
     @Override
+    public File createDocument(String filename) throws IOException{
+        File fileMetadata = new File();
+        fileMetadata.setName(filename);
+        fileMetadata.setMimeType(FileType.GOOGLE_DOCS.toString());
+
+        return service.files().create(fileMetadata)
+                .setFields("id")
+                .execute();
+    }
+
+    @Override
     public FileList getFiles() throws IOException, GeneralSecurityException{
         return service.files().list()
                 .execute();

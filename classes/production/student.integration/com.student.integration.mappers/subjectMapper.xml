@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.student.integration.mappers.SubjectMapper">
+    <select id="getSubjects" resultMap="subjectResultMap">
+        select * from UNIVERSITY_SUBJECTS
+    </select>
+
+    <select id="getSubject" resultMap="subjectResultMap">
+        select * from UNIVERSITY_SUBJECTS where ID = #{id}
+    </select>
+
+    <insert id="insertSubject" useGeneratedKeys="true" keyColumn="id" keyProperty="subject.id">
+		insert into UNIVERSITY_SUBJECTS(SUBJECT_NAME, DISPLAY_NAME, SUBJECT_NAME_SHORT, ACADEMY_ID)
+		values (#{subject.subjectName}, #{subject.displayName}, #{subject.subjectNameShort}, #{subject.academyId})
+	</insert>
+
+    <update id="updateSubject">
+      update UNIVERSITY_SUBJECTS set
+        subject_name = #{subject.subjectName},
+        display_name = #{subject.displayName},
+        subject_name_short = #{subject.subjectNameShort},
+        academy_id = #{subject.academyId}
+        where ID = #{subject.id}
+    </update>
+
+    <delete id="deleteSubject">
+        delete from UNIVERSITY_SUBJECTS where ID = #{id}
+    </delete>
+
+    <resultMap id="subjectResultMap" type="com.student.integration.model.Subject" autoMapping="true">
+        <result property="subjectName" column="subject_name"/>
+        <result property="displayName" column="display_name"/>
+        <result property="subjectNameShort" column="subject_name_short"/>
+        <result property="academyId" column="academy_id"/>
+    </resultMap>
+</mapper>

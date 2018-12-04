@@ -3,7 +3,6 @@
 <mapper namespace="com.student.integration.mappers.FileMapper">
     <select id="getFiles" resultMap="fileResultMap">
         select * from FILES
-        <if test="criteria != null">where name = #{criteria}</if>
     </select>
 
     <select id="getFile" resultMap="fileResultMap">
@@ -17,9 +16,9 @@
 
     <update id="updateFile">
       update FILES set
-        FILENAME = #{filename}
-        DESCRIPTION = #{description}
-        where ID = #{id}
+        RATING = #{file.rating},
+        RATING_COUNT = #{file.ratingCount}
+        where ID = #{file.id}
     </update>
 
     <delete id="deleteFile">
@@ -29,9 +28,6 @@
     <resultMap id="fileResultMap" type="com.student.integration.model.File" autoMapping="true">
         <result property="createUserId" column="create_user_id"/>
         <result property="rating" column="rating"/>
-        <result property="createDate" column="create_date"/>
         <result property="ratingCount" column="rating_count"/>
-        <result property="name" column="filename"/>
-        <result property="content" column="description"/>
     </resultMap>
 </mapper>
