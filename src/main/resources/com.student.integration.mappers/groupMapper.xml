@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.student.integration.mappers.GroupMapper">
+
+    <insert id="createGroup">
+      insert into SEMESTER_GROUPS (GROUP_NAME, CREATE_USER_ID, SEMESTER_ID)
+      values (#{groupName}, #{createUserId}, #{semesterId})
+    </insert>
+
+    <select id="getUsersGroups" resultMap="groupResultMap">
+        select
+          groups.ID id,
+          groups.GROUP_NAME name,
+          academies.ACADEMY_NAME academyName,
+          degrees.NAME degreeName,
+          semesters.SEMESTER_NUMBER semesterNo,
+          groups.SEMESTER_ID semester_id
+        from
+          SEMESTER_GROUPS groups
+           left join UNIVERSITY_SEMESTERS semesters ON semesters.ID = groups.SEMESTER_ID
+           left join UNIVERSITY_DEGREES degrees ON degrees.ID = semesters.DEGREE_ID
+           left join ACADEMIES academies ON academies.ID = degrees.ACADEMY_ID
+           where
+           groups.CREATE_USER_ID = #{userId}
+    </select>
+
+    <resultMap id="groupResultMap" type="com.student.integration.model.Group" autoMapping="true">
+        <collection property="subjects" column="{semester_id = semester_id}" ofType="com.student.integration.model.Subject"
+        select="getSubjects"/>
+    </resultMap>
+
+    <select id="getSubjects" resultMap="subjectResultMap">
+        select *
+        from SEMESTERS_SUBJECTS sem_subj
+        left join UNIVERSITY_SUBJECTS subjects ON sem_subj.SUBJECT_ID = subjects.ID
+        where sem_subj.SEMESTER_ID = #{semester_id}
+    </select>
+
+    <resultMap id="subjectResultMap" type="com.student.integration.model.Subject" autoMapping="true">
+        <result property="subjectName" column="subject_name"/>
+        <result property="displayName" column="display_name"/>
+        <result property="subjectNameShort" column="subject_name_short"/>
+    </resultMap>
+</mapper>

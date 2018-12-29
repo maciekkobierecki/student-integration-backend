@@ -8,5 +8,4 @@ public class Subject {
     private String subjectName;
     private String displayName;
     private String subjectNameShort;
-    private Long academyId;
 }

@@ -42,9 +42,10 @@ public class SiUserDetailsServiceImpl implements UserDetailsService, SiUserDetai
     }
 
     @Override
-    public Long createUser(String email) {
+    public Long createUser(String email, String displayName) {
         User user = new User();
         user.setEmail(email);
+        user.setDisplayName(displayName);
         userMapper.insertUser(user);
         return user.getId();
     }

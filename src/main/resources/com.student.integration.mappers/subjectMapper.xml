@@ -10,8 +10,8 @@
     </select>
 
     <insert id="insertSubject" useGeneratedKeys="true" keyColumn="id" keyProperty="subject.id">
-		insert into UNIVERSITY_SUBJECTS(SUBJECT_NAME, DISPLAY_NAME, SUBJECT_NAME_SHORT, ACADEMY_ID)
-		values (#{subject.subjectName}, #{subject.displayName}, #{subject.subjectNameShort}, #{subject.academyId})
+		insert into UNIVERSITY_SUBJECTS(SUBJECT_NAME, DISPLAY_NAME, SUBJECT_NAME_SHORT)
+		values (#{subject.subjectName}, #{subject.displayName}, #{subject.subjectNameShort})
 	</insert>
 
     <update id="updateSubject">
@@ -19,7 +19,6 @@
         subject_name = #{subject.subjectName},
         display_name = #{subject.displayName},
         subject_name_short = #{subject.subjectNameShort},
-        academy_id = #{subject.academyId}
         where ID = #{subject.id}
     </update>
 
@@ -31,6 +30,5 @@
         <result property="subjectName" column="subject_name"/>
         <result property="displayName" column="display_name"/>
         <result property="subjectNameShort" column="subject_name_short"/>
-        <result property="academyId" column="academy_id"/>
     </resultMap>
 </mapper>

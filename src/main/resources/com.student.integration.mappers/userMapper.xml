@@ -11,7 +11,7 @@
 
     <insert id="insertUser" useGeneratedKeys="true" keyColumn="id" keyProperty="user.id">
 		insert into USERS(EMAIL, DISPLAY_NAME)
-		values (#{user.email}, #{user.displayName})
+		values (#{user.email}, #{user.displayName,jdbcType=NULL})
 	</insert>
 
     <update id="updateUser">

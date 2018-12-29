@@ -17,21 +17,33 @@ public class FileServiceImpl implements FileService {
     private final FileMapper fileMapper;
     private final GoogleDriveService driveService;
 
+
     @Override
     public List<File> getFiles(Long subjectId, String criteria) {
-        List<File> files = fileMapper.getFiles(criteria);
-        return files;
+        return fileMapper.getFiles(subjectId, criteria);
     }
 
     @Override
-    public void createDocument(Long subjectId, User user) throws IOException {
+    public void createDocument(Long subjectId, Long userId) throws IOException {
         com.google.api.services.drive.model.File createdFile = driveService.createDocument("Nowy dokument");
-        File file = File.fromDriveFile(createdFile, user);
-        fileMapper.insertFile(file);
+        File file = File.fromDriveFile(createdFile, userId);
+        saveFile(subjectId, file);
+    }
+
+    private void saveFile(Long subjectId, File file) {
+        if (file.getId() == null) {
+            fileMapper.insertFile(file);
+            fileMapper.addFileSubjectAssociation(subjectId, file.getId());
+        }else{
+            fileMapper.updateFile(file);
+        }
     }
 
     @Override
     public void editFile(Long id, String filename, String description) {
-        fileMapper.updateFile(id, filename, description);
+        File file = fileMapper.getFile(id);
+        file.setName(filename);
+        file.setDescription(description);
+        fileMapper.updateFile(file);
     }
 }

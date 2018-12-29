@@ -26,7 +26,8 @@ public class FacebookAuthenticationProvider implements AuthenticationProvider {
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot fetch username by access token = "+fbAccessToken));
         SiUserDetails userDetails = userDetailsService.loadUserByEmail(email);
         if(userDetails == null){
-            userDetailsService.createUser(email);
+            //TODO: add proper displayname
+            userDetailsService.createUser(email, "testing name");
         }
         return authentication;
     }

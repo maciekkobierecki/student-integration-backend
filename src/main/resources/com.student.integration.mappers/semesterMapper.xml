@@ -9,6 +9,10 @@
         select * from UNIVERSITY_SEMESTERS where ID = #{id}
     </select>
 
+    <select id="getSemesterId" resultType="java.lang.Long">
+        select id from UNIVERSITY_SEMESTERS where DEGREE_ID=#{degreeId} AND SEMESTER_NUMBER=#{semesterNo}
+    </select>
+
     <insert id="insertSemester" useGeneratedKeys="true" keyColumn="id" keyProperty="semester.id">
 		insert into UNIVERSITY_SEMESTERS(SEMESTER_NAME)
 		values (#{semester.semesterName})

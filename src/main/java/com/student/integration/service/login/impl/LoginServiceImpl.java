@@ -25,15 +25,16 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String login(String facebookAccessToken) {
+        Long userId = null;
+        SiUserDetails userDetails = null;
         String email = facebookDataService.fetchUserEmail(facebookAccessToken)
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot fetch username by access token = "+facebookAccessToken));
-        SiUserDetails userDetails = userDetailsService.loadUserByEmail(email);
-        Long userId = null;
-
-        if(userDetails == null){
-            userId = userDetailsService.createUser(email);
-        }else{
+        try{
+            userDetails = userDetailsService.loadUserByEmail(email);
             userId = userDetails.getId();
+        } catch(UsernameNotFoundException e){
+            //TODO: add proper display name
+            userId = userDetailsService.createUser(email, "test name");
         }
         return tokenProvider.generateToken(userId);
     }

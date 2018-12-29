@@ -15,6 +15,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.Permission;
 import com.student.integration.google.drive.FileType;
 import com.student.integration.service.drive.GoogleDriveService;
 import lombok.extern.slf4j.Slf4j;
@@ -94,11 +95,15 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     public File createDocument(String filename) throws IOException{
         File fileMetadata = new File();
         fileMetadata.setName(filename);
-        fileMetadata.setMimeType(FileType.GOOGLE_DOCS.toString());
-
-        return service.files().create(fileMetadata)
-                .setFields("id")
+        fileMetadata.setMimeType("application/vnd.google-apps.document");
+        File createdFile = service.files().create(fileMetadata)
+                .setFields("id, name, webViewLink")
                 .execute();
+        Permission permission = new Permission();
+        permission.set("role", "reader");
+        permission.set("type", "anyone");
+        service.permissions().create(createdFile.getId(), permission).execute();
+        return createdFile;
     }
 
     @Override

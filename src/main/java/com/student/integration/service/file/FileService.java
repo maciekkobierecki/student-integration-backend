@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface FileService {
-    public List<File> getFiles(Long subjectId, String criteria);
-    public void createDocument(Long subjectId, User user) throws IOException;
-    public void editFile(Long id, String filename, String description);
+    List<File> getFiles(Long subjectId, String criteria);
+    void createDocument(Long subjectId, Long userId) throws IOException;
+    void editFile(Long id, String filename, String description);
 }

@@ -15,6 +15,8 @@ public interface SemesterMapper {
 
     Semester getSemester(@Param("id") Long id);
 
+    Long getSemesterId(@Param("degreeId") Long degreeId, @Param("semesterNo") Long semesterNo);
+
     void insertSemester(@Param("semester")Semester semester);
 
     void updateSemester(@Param("semester")Semester semester);

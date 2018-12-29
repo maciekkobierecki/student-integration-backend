@@ -10,13 +10,15 @@ import java.util.List;
 @Repository
 @Mapper
 public interface FileMapper {
-    List<File> getFiles(@Param("criteria") String criteria);
+    List<File> getFiles(@Param("subjectId") Long subjectId, @Param("criteria") String criteria);
 
     File getFile(@Param("id") Long id);
 
     void insertFile(@Param("file")File file);
 
-    void updateFile(@Param("id")Long id, @Param("filename")String filename, @Param("description") String description);
+    void addFileSubjectAssociation(@Param("subjectId")Long subjectId, @Param("fileId")Long fileId);
+
+    void updateFile(@Param("file")File file);
 
     void deleteFile(@Param("id")Long id);
 }
