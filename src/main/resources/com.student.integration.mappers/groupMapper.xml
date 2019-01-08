@@ -2,31 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.student.integration.mappers.GroupMapper">
 
-    <insert id="createGroup">
-      insert into SEMESTER_GROUPS (GROUP_NAME, CREATE_USER_ID, SEMESTER_ID)
-      values (#{groupName}, #{createUserId}, #{semesterId})
+    <insert id="createGroup" useGeneratedKeys="true" keyColumn="ID" keyProperty="group.id">
+      insert into SEMESTER_GROUPS (GROUP_NAME, CREATE_USER_ID, SEMESTER_ID, RECRUITMENT_ACTION_ID)
+      values (#{group.groupName}, #{group.createUserId}, #{group.semesterId}, #{group.recruitmentActionId})
     </insert>
 
-    <select id="getUsersGroups" resultMap="groupResultMap">
+    <select id="getUsersGroups" resultMap="groupInfoResultMap">
         select
           groups.ID id,
           groups.GROUP_NAME name,
           academies.ACADEMY_NAME academyName,
           degrees.NAME degreeName,
           semesters.SEMESTER_NUMBER semesterNo,
-          groups.SEMESTER_ID semester_id
+          groups.SEMESTER_ID semester_id,
+          actions.ACTION_HASH groupEnterHash
         from
-          SEMESTER_GROUPS groups
+          USERS_GROUPS
+           left join SEMESTER_GROUPS groups ON groups.ID = USERS_GROUPS.GROUP_ID
            left join UNIVERSITY_SEMESTERS semesters ON semesters.ID = groups.SEMESTER_ID
            left join UNIVERSITY_DEGREES degrees ON degrees.ID = semesters.DEGREE_ID
            left join ACADEMIES academies ON academies.ID = degrees.ACADEMY_ID
+           left join GROUP_ACTIONS actions on actions.ID = groups.RECRUITMENT_ACTION_ID
            where
-           groups.CREATE_USER_ID = #{userId}
+           USERS_GROUPS.USER_ID = #{userId}
     </select>
 
-    <resultMap id="groupResultMap" type="com.student.integration.model.Group" autoMapping="true">
-        <collection property="subjects" column="{semester_id = semester_id}" ofType="com.student.integration.model.Subject"
-        select="getSubjects"/>
+    <resultMap id="groupInfoResultMap" type="com.student.integration.model.GroupInfo" autoMapping="true">
+        <collection property="subjects" column="{semester_id = semester_id}"
+                    ofType="com.student.integration.model.Subject"
+                    select="getSubjects"/>
     </resultMap>
 
     <select id="getSubjects" resultMap="subjectResultMap">
@@ -41,4 +45,39 @@
         <result property="displayName" column="display_name"/>
         <result property="subjectNameShort" column="subject_name_short"/>
     </resultMap>
+
+    <insert id="addUserToGroup">
+      insert into USERS_GROUPS (USER_ID, GROUP_ID)
+      values (#{userId}, #{groupId})
+    </insert>
+
+    <insert id="createGroupAction" useGeneratedKeys="true" keyColumn="ID" keyProperty="action.id">
+        insert into GROUP_ACTIONS (GROUP_ID, ACTIVE_FLAG, VALID_FROM, ACTION_HASH)
+         values (#{action.groupId}, #{action.isActive}, #{action.validFrom}, #{action.actionHash})
+    </insert>
+
+    <select id="getGroup" resultMap="groupResultMap">
+        select groups.ID,
+              groups.SEMESTER_ID semesterId,
+              groups.CREATE_USER_ID createUserId,
+              groups.GROUP_NAME groupName,
+              groups.RECRUITMENT_ACTION_ID recruitmentActionId
+         from GROUP_ACTIONS actions
+         left join SEMESTER_GROUPS groups on groups.ID = actions.GROUP_ID
+          where ACTION_HASH = #{actionHash}
+    </select>
+
+    <resultMap id="groupResultMap" type="com.student.integration.model.Group" autoMapping="true">
+    </resultMap>
+
+    <select id="isActionActive">
+        select ACTIVE_FLAG from GROUP_ACTIONS where ACTION_HASH=#{actionHash}
+    </select>
+
+    <update id="updateGroup">
+        update SEMESTER_GROUPS SET
+        GROUP_NAME = #{group.groupName},
+        RECRUITMENT_ACTION_ID = #{group.recruitmentActionId}
+        WHERE ID = #{group.id}
+    </update>
 </mapper>
