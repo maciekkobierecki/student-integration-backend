@@ -7,5 +7,5 @@ import java.util.List;
 public interface AcademyService {
     public List<Academy> getAcademies();
 
-    public Academy saveAcademy(String academyName, String academyShortName);
+    public void saveAcademy(Academy academy);
 }

@@ -17,12 +17,13 @@ public class File {
     private Date createDate;
     private Long rating;
     private Long ratingCount;
+    private Boolean isMarkable;
 
     public static File fromDriveFile(com.google.api.services.drive.model.File driveFile, Long userId){
         File file = new File();
         file.setName(driveFile.getName());
         file.setRating(0L);
-        file.setRatingCount(0L);
+        file.setRatingCount(1L);
         file.setCreateUserId(userId);
         file.setCreateDate(new Date());
         file.setDescription("Opis dokumentu");

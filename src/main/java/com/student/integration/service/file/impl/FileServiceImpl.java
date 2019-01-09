@@ -3,10 +3,12 @@ package com.student.integration.service.file.impl;
 import com.student.integration.mappers.FileMapper;
 import com.student.integration.model.File;
 import com.student.integration.model.User;
+import com.student.integration.security.SiUserDetails;
 import com.student.integration.service.drive.GoogleDriveService;
 import com.student.integration.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,8 +21,8 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public List<File> getFiles(Long subjectId, String criteria) {
-        return fileMapper.getFiles(subjectId, criteria);
+    public List<File> getFiles(Long subjectId, Long userId, String criteria) {
+        return fileMapper.getFiles(subjectId, userId, criteria);
     }
 
     @Override
@@ -45,5 +47,16 @@ public class FileServiceImpl implements FileService {
         file.setName(filename);
         file.setDescription(description);
         fileMapper.updateFile(file);
+    }
+
+    @Override
+    @Transactional
+    public void markFile(Long id, Boolean isPositiveGrade, SiUserDetails userDetails) {
+        if(isPositiveGrade){
+            fileMapper.markFilePositive(id);
+        }else{
+            fileMapper.markFileNegative(id);
+        }
+        fileMapper.userMarkedFile(id, userDetails.getId());
     }
 }

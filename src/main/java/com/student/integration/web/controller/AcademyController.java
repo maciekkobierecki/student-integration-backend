@@ -23,6 +23,6 @@ public class AcademyController {
 
     @PostMapping("/api/academies/new")
     public void addAcademy(Academy academy, @AuthenticationPrincipal SiUserDetails userDetails){
-        academyService.saveAcademy("","");
+        academyService.saveAcademy(academy);
     }
 }

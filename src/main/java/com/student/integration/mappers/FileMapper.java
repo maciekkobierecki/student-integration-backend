@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 @Mapper
 public interface FileMapper {
-    List<File> getFiles(@Param("subjectId") Long subjectId, @Param("criteria") String criteria);
+    List<File> getFiles(@Param("subjectId") Long subjectId, @Param("userId")Long userId, @Param("criteria") String criteria);
 
     File getFile(@Param("id") Long id);
 
@@ -21,4 +21,8 @@ public interface FileMapper {
     void updateFile(@Param("file")File file);
 
     void deleteFile(@Param("id")Long id);
+
+    void markFilePositive(@Param("id")Long id);
+    void markFileNegative(@Param("id")Long id);
+    void userMarkedFile(@Param("id")Long id, @Param("userId")Long userId);
 }

@@ -19,11 +19,7 @@ public class AcademyServiceImpl implements AcademyService {
     }
 
     @Override
-    public Academy saveAcademy(String academyName, String academyShortName) {
-        Academy newAcademy = new Academy();
-        newAcademy.setAcademyName(academyName);
-        newAcademy.setAcademyNameShort(academyShortName);
-        academyMapper.insertAcademy(newAcademy);
-        return newAcademy;
+    public void saveAcademy(Academy academy) {
+        academyMapper.insertAcademy(academy);
     }
 }

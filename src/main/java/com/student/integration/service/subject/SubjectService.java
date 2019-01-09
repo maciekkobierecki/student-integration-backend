@@ -5,5 +5,6 @@ import com.student.integration.model.Subject;
 import java.util.List;
 
 public interface SubjectService {
-    public List<Subject> getAllSubjectsOfAcademy(Long academyId);
+    List<Subject> getAllSubjectsOfAcademy(Long academyId);
+    List<Subject> getSubjectsBoundToDegree(Long degreeId);
 }

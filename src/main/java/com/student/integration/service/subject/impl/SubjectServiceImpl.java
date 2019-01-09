@@ -16,4 +16,9 @@ public class SubjectServiceImpl implements SubjectService {
     public List<Subject> getAllSubjectsOfAcademy(Long academyId) {
         return subjectMapper.getSubjects();
     }
+
+    @Override
+    public List<Subject> getSubjectsBoundToDegree(Long degreeId) {
+        return null;
+    }
 }

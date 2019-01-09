@@ -20,18 +20,23 @@ import java.util.List;
 public class FileController {
     private final FileService fileService;
 
-    @RequestMapping(value = "/api/files", method= RequestMethod.POST)
-    public List<File> getFiles(@RequestBody FileListRequest request, @AuthenticationPrincipal SiUserDetails userDetails){
-        return fileService.getFiles(request.getSubjectId(), request.getCriteria());
+    @RequestMapping(value = "/api/files", method = RequestMethod.POST)
+    public List<File> getFiles(@RequestBody FileListRequest request, @AuthenticationPrincipal SiUserDetails userDetails) {
+        return fileService.getFiles(request.getSubjectId(), userDetails.getId(), request.getCriteria());
     }
 
-    @PostMapping(value = "/api/file/{subjectId}/new")
+    @PostMapping(value = "/api/files/{subjectId}/new")
     public void createDocument(@PathVariable Long subjectId, @AuthenticationPrincipal SiUserDetails userDetails) throws IOException {
         fileService.createDocument(subjectId, userDetails.getId());
     }
 
     @PostMapping(value = "/api/file/edit")
-    public void editFile(@RequestBody EditFileRequest request, @AuthenticationPrincipal SiUserDetails userDetails){
+    public void editFile(@RequestBody EditFileRequest request, @AuthenticationPrincipal SiUserDetails userDetails) {
         fileService.editFile(request.getId(), request.getName(), request.getContent());
+    }
+
+    @PostMapping(value = "/api/files/{fileId}/mark/{isPositiveGrade}")
+    public void markFile(@PathVariable Long fileId, @PathVariable Boolean isPositiveGrade, @AuthenticationPrincipal SiUserDetails userDetails) {
+        fileService.markFile(fileId, isPositiveGrade, userDetails);
     }
 }
