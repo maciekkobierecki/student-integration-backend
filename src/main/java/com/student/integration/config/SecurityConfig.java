@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private FacebookAuthenticationProvider facebookAuthenticationProvider;
 
     @Autowired
-    public SecurityConfig(SiUserDetailsService userDetailsService, JwtAuthenticationEntryPoint entryPoint, JwtTokenProvider tokenProvider, FacebookAuthenticationProvider facebookAuthenticationProvider){
+    public SecurityConfig(SiUserDetailsService userDetailsService, JwtAuthenticationEntryPoint entryPoint, JwtTokenProvider tokenProvider, FacebookAuthenticationProvider facebookAuthenticationProvider) {
         this.siUserDetailsService = (UserDetailsService) userDetailsService;
         this.unauthorizedHandler = entryPoint;
         this.jwtTokenProvider = tokenProvider;
@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtTokenProvider, (SiUserDetailsService) siUserDetailsService);
     }
 
@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
@@ -74,10 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .and()
                 .csrf()
                 .disable()
                 .exceptionHandling()
@@ -89,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**")
                 .permitAll()
-                .antMatchers(HttpMethod.OPTIONS,"/**")//allow CORS option calls
+                .antMatchers(HttpMethod.OPTIONS, "/**")//allow CORS option calls
                 .permitAll()
                 .anyRequest()
                 .authenticated();

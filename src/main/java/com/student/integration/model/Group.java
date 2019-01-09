@@ -1,16 +1,15 @@
 package com.student.integration.model;
 
-import lombok.Data;
-
-import java.util.List;
+import lombok.*;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Group {
     private Long id;
-    private String name;
-    private String academyName;
-    private String degreeName;
-    private Long semesterNo;
-    private String url;
-    private List<Subject> subjects;
+    private String groupName;
+    private Long createUserId;
+    private Long semesterId;
+    private Long recruitmentActionId;
 }

@@ -1,11 +1,11 @@
 package com.student.integration.web.controller;
 
-import com.student.integration.mappers.GroupMapper;
 import com.student.integration.model.Group;
-import com.student.integration.model.Subject;
+import com.student.integration.model.GroupInfo;
 import com.student.integration.security.SiUserDetails;
 import com.student.integration.service.group.GroupService;
 import com.student.integration.web.request.CreateGroupReq;
+import com.student.integration.web.response.GroupEnterResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,13 @@ public class GroupController {
     }
 
     @GetMapping("/api/groups")
-    public List<Group> getUsersGroups(@AuthenticationPrincipal SiUserDetails userDetails){
+    public List<GroupInfo> getUsersGroups(@AuthenticationPrincipal SiUserDetails userDetails){
         return groupService.getUsersGroups(userDetails.getId());
+    }
+
+    @PostMapping("/api/groups/enter/{actionHash}")
+    public GroupEnterResponse enterToGroup(@PathVariable String actionHash, @AuthenticationPrincipal SiUserDetails userDetails){
+        Group group = groupService.addUserToGroup(actionHash, userDetails);
+        return new GroupEnterResponse(group.getGroupName());
     }
 }
