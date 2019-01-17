@@ -2,7 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.student.integration.mappers.SubjectMapper">
     <select id="getSubjects" resultMap="subjectResultMap">
-        select * from UNIVERSITY_SUBJECTS
+        <include refid="paginationStartSql"/>
+        select subjects.*,
+        academies.ACADEMY_NAME academyName
+        from UNIVERSITY_SUBJECTS subjects
+        left join SEMESTERS_SUBJECTS ON subjects.ID = SEMESTERS_SUBJECTS.SUBJECT_ID
+        left join UNIVERSITY_SEMESTERS semesters ON semesters.ID = SEMESTERS_SUBJECTS.SEMESTER_ID
+        left join UNIVERSITY_DEGREES degrees ON degrees.ID = semesters.DEGREE_ID
+        left join ACADEMIES academies ON ACADEMIES.ID = degrees.ACADEMY_ID
+        ORDER BY SUBJECT_NAME
+        <include refid="paginationEndSql"/>
     </select>
 
     <select id="getSubject" resultMap="subjectResultMap">
@@ -31,4 +40,98 @@
         <result property="displayName" column="display_name"/>
         <result property="subjectNameShort" column="subject_name_short"/>
     </resultMap>
+
+    <resultMap id="subjectInfoResultMap" type="com.student.integration.model.SubjectInfo">
+        <association property="subject" resultMap="subjectResultMap"/>
+    </resultMap>
+
+    <sql id="paginationStartSql">
+        <if test="pagination != null">
+            select pagination_2.*
+            from (select pagination_1.*, rownum rownum_ from (
+        </if>
+    </sql>
+
+    <sql id="paginationEndSql">
+        <if test="pagination != null">
+            ) pagination_1
+            where rownum &lt;= #{pagination.offset} + #{pagination.limit}
+            ) pagination_2
+            where rownum_ &gt; #{pagination.offset}
+        </if>
+    </sql>
+
+
+    <update id="markSubjectPositive">
+        update UNIVERSITY_SUBJECTS set
+          RATING_COUNT = RATING_COUNT+1,
+          RATING = RATING+1
+          WHERE ID=#{id}
+    </update>
+
+    <update id="markSubjectNegative">
+         update UNIVERSITY_SUBJECTS set
+          RATING_COUNT = RATING_COUNT+1
+          WHERE ID=#{id}
+    </update>
+
+    <insert id="userMarkedSubject">
+        insert into USERS_SUBJECTS_MARKS(SUBJECT_ID, USER_ID) VALUES(#{id}, #{userId})
+    </insert>
+
+    <select id="getSubjectDetails" resultMap="subjectDetailsResultMap">
+        select
+          subjects.ID,
+          subjects.SUBJECT_NAME name,
+          subjects.SUBJECT_NAME_SHORT shortName,
+          subjects.RATING,
+          subjects.RATING_COUNT ratingCount,
+          academies.ACADEMY_NAME academyName,
+          CASE WHEN usersSubjectsMarks.user_id = #{userId}
+        THEN 0
+        ELSE 1
+        END AS isMarkable
+        FROM UNIVERSITY_SUBJECTS subjects
+        left join (select * from USERS_SUBJECTS_MARKS usersMarks where usersMarks.USER_ID = #{userId}) usersSubjectsMarks on usersSubjectsMarks.subject_id = subjects.id
+        left join SEMESTERS_SUBJECTS ON subjects.ID = SEMESTERS_SUBJECTS.SUBJECT_ID
+        left join UNIVERSITY_SEMESTERS semesters ON semesters.ID = SEMESTERS_SUBJECTS.SEMESTER_ID
+        left join UNIVERSITY_DEGREES degrees ON degrees.ID = semesters.DEGREE_ID
+        left join ACADEMIES academies ON ACADEMIES.ID = degrees.ACADEMY_ID
+        WHERE subjects.ID=#{id}
+    </select>
+
+    <resultMap id="subjectDetailsResultMap" type="com.student.integration.model.SubjectDetails" autoMapping="true">
+        <association property="filesCount" select="getFilesCount" column="{id = id}"/>
+        <association property="commentsCount" select="getCommentsCount" column="{id = id} "/>
+    </resultMap>
+
+    <select id="getFilesCount" resultType="java.lang.Integer">
+        select COUNT(*) FROM SUBJECTS_FILES WHERE SUBJECT_ID = #{id}
+    </select>
+
+    <select id="getCommentsCount" resultType="java.lang.Integer">
+        select COUNT(*) FROM SUBJECT_COMMENTS WHERE SUBJECT_ID = #{id}
+    </select>
+
+    <select id="getSubjectComments" resultMap="subjectCommentResultMap">
+        select
+        comments.ID,
+        comments.CONTENT content,
+        comments.CREATE_DATE createDate,
+        CASE WHEN IS_ANONYMOUS = 1
+        THEN 'anonim'
+        ELSE USERS.DISPLAY_NAME
+        END AS author
+         from SUBJECT_COMMENTS comments
+          LEFT JOIN USERS ON USERS.ID = comments.CREATE_USER_ID
+          WHERE SUBJECT_ID = #{id} ORDER BY CREATE_DATE DESC
+    </select>
+
+    <resultMap id="subjectCommentResultMap" type="com.student.integration.model.SubjectComment" autoMapping="true">
+    </resultMap>
+
+    <insert id="addComment" useGeneratedKeys="true" keyColumn="id" keyProperty="subjectComment.id">
+      insert into SUBJECT_COMMENTS (SUBJECT_ID, CONTENT, CREATE_USER_ID, IS_ANONYMOUS, CREATE_DATE)
+      values (#{id}, #{content}, #{userId}, #{isAnonymous}, SYSDATE)
+    </insert>
 </mapper>

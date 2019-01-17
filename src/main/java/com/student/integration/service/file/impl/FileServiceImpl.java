@@ -6,6 +6,7 @@ import com.student.integration.model.User;
 import com.student.integration.security.SiUserDetails;
 import com.student.integration.service.drive.GoogleDriveService;
 import com.student.integration.service.file.FileService;
+import com.student.integration.web.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +22,8 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public List<File> getFiles(Long subjectId, Long userId, String criteria) {
-        return fileMapper.getFiles(subjectId, userId, criteria);
+    public List<File> getFiles(Long subjectId, Long userId, String criteria, Pagination pagination) {
+        return fileMapper.getFiles(subjectId, userId, criteria, pagination);
     }
 
     @Override

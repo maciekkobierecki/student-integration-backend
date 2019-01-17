@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.student.integration.mappers.FileMapper">
     <select id="getFiles" resultMap="fileResultMap">
+        <include refid="com.student.integration.mappers.SubjectMapper.paginationStartSql"/>
         select
         files.*,
         CASE WHEN userfilesMarks.user_id = #{userId}
@@ -10,9 +11,10 @@
         END AS isMarkable
         FROM FILES
         left join SUBJECTS_FILES subj_files ON subj_files.FILE_ID = files.ID
-        left join (select * from FILES_MARKS filesMarks where filesMarks.USER_ID = #{userId}) userfilesMarks on userFilesMarks.file_id = files.ID
-        where subj_files.SUBJECT_ID = #{subjectId}
+        left join (select * from USERS_FILES_MARKS usersMarks where usersMarks.USER_ID = #{userId}) userfilesMarks on userFilesMarks.file_id = files.ID
+        <if test="subjectId != null">where subj_files.SUBJECT_ID = #{subjectId}</if>
         <if test="criteria != null">and name = #{criteria}</if>
+        <include refid="com.student.integration.mappers.SubjectMapper.paginationEndSql"/>
     </select>
 
     <select id="getFile" resultMap="fileResultMap">
@@ -64,6 +66,6 @@
     </update>
 
     <insert id="userMarkedFile">
-        insert into FILES_MARKS(FILE_ID, USER_ID) VALUES(#{id}, #{userId})
+        insert into USERS_FILES_MARKS(FILE_ID, USER_ID) VALUES(#{id}, #{userId})
     </insert>
 </mapper>

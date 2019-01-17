@@ -6,6 +6,7 @@ import com.student.integration.security.SiUserDetails;
 import com.student.integration.service.file.FileService;
 import com.student.integration.web.request.EditFileRequest;
 import com.student.integration.web.request.FileListRequest;
+import com.student.integration.web.request.MarkFileRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +23,7 @@ public class FileController {
 
     @RequestMapping(value = "/api/files", method = RequestMethod.POST)
     public List<File> getFiles(@RequestBody FileListRequest request, @AuthenticationPrincipal SiUserDetails userDetails) {
-        return fileService.getFiles(request.getSubjectId(), userDetails.getId(), request.getCriteria());
+        return fileService.getFiles(request.getSubjectId(), userDetails.getId(), request.getCriteria(), request.getPagination());
     }
 
     @PostMapping(value = "/api/files/{subjectId}/new")
@@ -35,8 +36,8 @@ public class FileController {
         fileService.editFile(request.getId(), request.getName(), request.getContent());
     }
 
-    @PostMapping(value = "/api/files/{fileId}/mark/{isPositiveGrade}")
-    public void markFile(@PathVariable Long fileId, @PathVariable Boolean isPositiveGrade, @AuthenticationPrincipal SiUserDetails userDetails) {
-        fileService.markFile(fileId, isPositiveGrade, userDetails);
+    @PostMapping(value = "/api/files/mark")
+    public void markFile(@RequestBody MarkFileRequest markFileRequest, @AuthenticationPrincipal SiUserDetails userDetails) {
+        fileService.markFile(markFileRequest.getFileId(), markFileRequest.getIsPositive(), userDetails);
     }
 }
